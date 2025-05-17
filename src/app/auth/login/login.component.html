@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <form class="w-100" style="max-width: 600px; border-radius: 50px; padding: 40px; background-color: #fff; font-family: 'Inter'; box-shadow: 0 0 20px rgba(0,0,0,0.1);" (ngSubmit)="onLogin()">
+    <h1 class="text-align-left mb-2" style="font-size: 36px; color: #65478f;">Hello, Welcome</h1>
+    <p class="text-align-left mb-4" style="color: #65478f; font-size: 18px;">
+      💪 Let's Sign In to Exclusive Fitness Tracker and Healthcare
+    </p>
+
+    <div class="mb-3">
+      <label for="email" class="form-label" style="color: #65478f;">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="login.email"
+        class="form-control"
+        placeholder="✉︎ Enter your email"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label" style="color: #65478f;">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="login.password"
+        class="form-control"
+        placeholder="🔑 Enter your password"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+      />
+    </div>
+
+    <button type="submit" class="btn w-100 mt-3" style="background-color: #65478f; color: white; border-radius: 20px; height: 50px; font-size: 24px; font-family: 'Inter';">
+      Sign In
+    </button>
+
+    <p *ngIf="errorMessage" class="text-danger text-center mt-3">
+      {{ errorMessage }}
+    </p>
+
+    <hr class="my-4" />
+
+    <p class="text-center" style="font-size: 18px;">
+      Don't you have an account?
+      <a routerLink="/register" style="color: #65478f; font-weight: bold; text-decoration: none;">Sign Up</a>
+    </p>
+  </form>
+</div>

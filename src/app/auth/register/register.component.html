@@ -1,0 +1,76 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <form class="w-100" style="max-width: 600px; border-radius: 50px; padding: 40px; background-color: #fff; font-family: 'Inter'; box-shadow: 0 0 20px rgba(0,0,0,0.1);" (ngSubmit)="register()">
+    <h1 class="text-align-left mb-2" style="font-size: 36px; color: #65478f; ">Hello, Welcome</h1>
+    <p class="text-align-left mb-4" style="color: #65478f; font-size: 18px;">
+      💪 Let's Sign Up to Exclusive Fitness Tracker and Healthcare
+    </p>
+
+    <div class="mb-3">
+      <label for="first_name" class="form-label" style="color: #65478f;">First Name</label>
+      <input
+        type="text"
+        id="first_name"
+        name="first_name"
+        [(ngModel)]="first_name"
+        class="form-control"
+        placeholder="👤 Enter your first name"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="last_name" class="form-label" style="color: #65478f;">Last Name</label>
+      <input
+        type="text"
+        id="last_name"
+        name="last_name"
+        [(ngModel)]="last_name"
+        class="form-control"
+        placeholder="👤 Enter your last name"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label" style="color: #65478f;">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="email"
+        class="form-control"
+        placeholder="✉︎ Enter your email"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label" style="color: #65478f;">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="password"
+        class="form-control"
+        placeholder="🔑 Enter your password"
+        required
+        style="background-color: #f9f5f2; border-radius: 20px; height: 50px;"
+        pattern=".{6,}"
+      />
+    </div>
+
+    <button type="submit" class="btn w-100 mt-3" style="background-color: #65478f; color: white; border-radius: 20px; height: 50px; font-size: 24px; font-family: 'Inter';">
+      Sign Up
+    </button>
+
+    <hr class="my-4" />
+
+    <p class="text-center" style="font-size: 18px;">
+      Already have an account?
+      <a routerLink="/login" style="color: #65478f; font-weight: bold; text-decoration: none;">Sign In</a>
+    </p>
+  </form>
+</div>

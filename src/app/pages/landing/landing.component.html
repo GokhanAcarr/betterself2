@@ -1,0 +1,91 @@
+<nav class="navbar navbar-expand-lg bg-light py-4">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/overview">
+      <img src="assets/Better (1).png" alt="BetterSelf Logo" style="height: 80px;">
+    </a>
+    <div class="ms-auto">
+      <a routerLink="/login">
+        <button class="btn text-white" style="background-color: #65478F; font-size: 20px; width: 175px; height: 50px;">
+          Get Started
+        </button>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="container d-flex flex-wrap align-items-center py-5">
+  <div class="col-md-6">
+    <h1 class="text-success fw-bold">A healthier you,</h1>
+    <h1 class="text-success fw-bold">a better life.</h1>
+    <h4 class="text-muted">Set your goals,<br>track progress, and improve.</h4>
+    <button (click)="scrollToSection()" class="btn mt-3" style="width: 370px; height: 60px; background-color: #6D8B63; color: white; font-size: 24px;">
+      Learn More
+    </button>
+    <div>
+      <a routerLink="/login" class="d-block mt-2 text-muted text-decoration-underline">Get Started For Free</a>
+    </div>
+  </div>
+  <div class="col-md-6 text-center">
+    <img src="assets/mockup2.png" alt="App Preview" class="img-fluid" style="max-height: 500px;">
+  </div>
+</section>
+
+<!-- Info Section -->
+<section id="learn-more-section" class="container d-flex flex-wrap align-items-center py-5">
+  <div class="col-md-6 text-center">
+    <img src="assets/mockup2.png" alt="Data View" class="img-fluid" style="max-height: 500px;">
+  </div>
+  <div class="col-md-6 text-end">
+    <h1 class="text-success fw-bold">Your Strength,<br>Your Data,<br>One App.</h1>
+    <p class="text-muted">🔥 Log warm-up, drop, failure sets</p>
+    <p class="text-muted">📊 Track reps, calories, time, and more</p>
+  </div>
+</section>
+
+<!-- Progress Section -->
+<section class="container d-flex flex-wrap align-items-center py-5">
+  <div class="col-md-6">
+    <h1 class="text-success fw-bold">Track Progress,<br>Recover Better.</h1>
+    <p class="text-muted">📈 Monitor your personal bests</p>
+    <p class="text-muted">😴 Sleep better, recover faster and easier</p>
+  </div>
+  <div class="col-md-6 text-center">
+    <img src="assets/mockup2.png" alt="Recovery" class="img-fluid" style="max-height: 500px;">
+  </div>
+</section>
+
+<!-- Reps Display -->
+<section class="text-center py-5 bg-white">
+  <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+    <span class="box" *ngFor="let rep of reps">{{ rep }}</span>
+  </div>
+  <h1 style="color: #65478F;">Reps Done By Users</h1>
+</section>
+
+<!-- Footer -->
+<footer class="bg-light py-5">
+  <div class="container d-flex flex-wrap">
+    <div class="col-md-6 text-center">
+      <img src="assets/Better (1).png" height="250px" />
+    </div>
+    <div class="col-md-2 text-center">
+      <h4>About Us</h4><hr>
+      <p><a href="#" class="text-success">Mission</a></p>
+      <p><a href="#" class="text-success">Team</a></p>
+    </div>
+    <div class="col-md-2 text-center">
+      <h4>Support</h4><hr>
+      <p><a href="#" class="text-success">Contact Us</a></p>
+    </div>
+    <div class="col-md-2 text-center">
+      <h4>Social</h4><hr>
+      <p><a href="#" class="text-success">Instagram</a></p>
+      <p><a href="#" class="text-success">Twitter</a></p>
+      <p><a href="#" class="text-success">YouTube</a></p>
+      <p><a href="#" class="text-success">LinkedIn</a></p>
+    </div>
+  </div>
+  <hr>
+  <p class="text-center">&copy; BetterSelf</p>
+</footer>
