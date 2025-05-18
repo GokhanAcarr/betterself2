@@ -23,13 +23,19 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card bg-success bg-opacity-25 h-100">
-          <div class="card-header">Sleep Quality</div>
-          <div class="card-body">
-            <p class="small">Lorem ipsum dolor sit amet...</p>
-          </div>
-        </div>
-      </div>
+  <div class="card bg-success bg-opacity-25 h-100">
+    <div class="card-header">Sleep Quality</div>
+    <div class="card-body">
+      <p class="small" *ngIf="sleepQuality !== null && sleepQuality !== undefined; else noData">
+        {{ sleepQuality | number:'1.0-0' }}%
+      </p>
+      <ng-template #noData>
+        <p class="small text-muted">No sleep data available</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
       <div class="col-md-4">
         <div class="card bg-danger bg-opacity-25 h-100">
           <div class="card-header">Today's Calories</div>

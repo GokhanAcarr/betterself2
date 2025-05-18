@@ -42,31 +42,41 @@
           class="card shadow-sm w-100 d-flex justify-content-center align-items-center"
           style="min-height: 100px; background-color: white;"
         >
-          <button
-            class="btn btn-primary me-2"
-            style="background-color: #65478F; width: 100px;"
-            (click)="showEditDialog()"
-          >
-            Edit User
-          </button>
-          <button class="btn btn-danger" style="width: 100px;" (click)="deleteUser()">
-            Delete User
-          </button>
+          <div class="d-flex gap-2 w-100 px-3">
+            <button
+              class="btn btn-primary flex-grow-1"
+              style="background-color: #65478F;"
+              (click)="showEditDialog()"
+            >
+              Edit User
+            </button>
+            <button class="btn btn-danger flex-grow-1" (click)="deleteUser()">
+              Delete User
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="col-md-9 d-flex flex-column gap-3">
-        <div class="card shadow-sm" style="min-height: 150px; background-color: white;">
-          <div class="card-body">
-            <h5>Water Tracker Upcoming!</h5>
+        <!-- Kartları eşit boyda ve yan yana göstermek için düzenlendi -->
+        <div class="row g-3 align-items-stretch">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <app-water-intake></app-water-intake>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <app-sleep-record></app-sleep-record>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="card shadow-sm flex-grow-1" style="background-color: white;">
-          <div class="card-body">
-            <h5>Profile Upgrades Upcoming!</h5>
-          </div>
-        </div>
+        <app-posts></app-posts>
       </div>
     </div>
   </main>

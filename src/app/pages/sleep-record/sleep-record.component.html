@@ -1,0 +1,12 @@
+<div class="card p-3" style="background-color: #fff;">
+  <div>
+  <p>Bugün uyuduğun saat: {{ hoursSlept !== null ? hoursSlept + ' saat' : 'Henüz kaydedilmedi' }}</p>
+
+  <div *ngIf="hoursSlept === null">
+    <input type="number" [(ngModel)]="inputHours" placeholder="Saat girin" min="0" step="0.1" />
+    <button (click)="saveSleepHours()" [disabled]="loading">Kaydet</button>
+    <p style="color:red" *ngIf="errorMsg">{{errorMsg}}</p>
+  </div>
+</div>
+
+</div>

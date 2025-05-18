@@ -5,14 +5,16 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { PostsComponent } from '../../pages/posts/posts.component';
+import { WaterIntakeComponent } from '../water-intake/water-intake.component';
+import { SleepRecordComponent } from '../sleep-record/sleep-record.component';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
   standalone: true,
-  imports: [SidebarComponent, FormsModule, CommonModule, HttpClientModule],
-})
+  imports: [SidebarComponent, FormsModule, CommonModule, HttpClientModule, PostsComponent, WaterIntakeComponent, SleepRecordComponent],})
 export class ProfileComponent implements OnInit {
   user: User | null = null;
   displayEditDialog = false;
