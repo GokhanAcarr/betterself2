@@ -25,7 +25,7 @@ export class PostsComponent implements OnInit {
         this.posts = data;
       },
       error: (err) => {
-        console.error('Postlar alınamadı:', err);
+        console.error('Could not get posts:', err);
       },
     });
   }
@@ -38,7 +38,7 @@ export class PostsComponent implements OnInit {
         this.loadPosts();
       },
       error: (err) => {
-        console.error('Post paylaşımı başarısız:', err);
+        console.error('Failed to share post:', err);
       },
     });
   }

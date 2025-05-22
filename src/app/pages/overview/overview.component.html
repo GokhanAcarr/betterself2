@@ -1,7 +1,6 @@
 <div class="d-flex vh-100">
   <app-sidebar></app-sidebar>
 
-  <!-- Main content -->
   <main class="flex-grow-1 p-4 overflow-auto">
     <div class="d-flex justify-content-between align-items-start mb-3 position-relative">
       <div>
@@ -13,28 +12,52 @@
       </button>
     </div>
 
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4 border-top pt-3">
       <div class="col-md-4">
         <div class="card bg-warning bg-opacity-25 h-100">
           <div class="card-header">Progress</div>
           <div class="card-body">
-            <p class="small">Lorem ipsum dolor sit amet...</p>
+            <ng-container *ngIf="progressPercent > 0; else noProgress">
+              <p class="small mb-2">You’ve achieved:</p>
+              <h4>{{ progressPercent | number:'1.0-0' }}%</h4>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-warning"
+                     role="progressbar"
+                     [style.width.%]="progressPercent"
+                     [attr.aria-valuenow]="progressPercent"
+                     aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </ng-container>
+            <ng-template #noProgress>
+              <p class="small text-muted">Progress data not available</p>
+            </ng-template>
           </div>
         </div>
       </div>
+
+
       <div class="col-md-4">
-  <div class="card bg-success bg-opacity-25 h-100">
-    <div class="card-header">Sleep Quality</div>
-    <div class="card-body">
-      <p class="small" *ngIf="sleepQuality !== null && sleepQuality !== undefined; else noData">
-        {{ sleepQuality | number:'1.0-0' }}%
-      </p>
-      <ng-template #noData>
-        <p class="small text-muted">No sleep data available</p>
-      </ng-template>
-    </div>
-  </div>
-</div>
+        <div class="card bg-success bg-opacity-25 h-100">
+          <div class="card-header">Sleep Quality</div>
+          <div class="card-body">
+            <ng-container *ngIf="sleepQuality !== null && sleepQuality !== undefined; else noData">
+              <p class="small mb-2">Your Sleep Quality:</p>
+              <h4>{{ sleepQuality | number:'1.0-0' }}%</h4>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success"
+                     role="progressbar"
+                     [style.width.%]="sleepQuality"
+                     [attr.aria-valuenow]="sleepQuality"
+                     aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </ng-container>
+            <ng-template #noData>
+              <p class="small text-muted">No sleep data available</p>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
 
       <div class="col-md-4">
         <div class="card bg-danger bg-opacity-25 h-100">
@@ -46,28 +69,43 @@
       </div>
     </div>
 
-    <div class="card mb-4">
+
+    <div class="card mt-3">
       <div class="card-body">
-        <!-- Buraya chart component ya da kütüphanenizin chart kodları gelecek -->
-        <p>Chart placeholder (Bar chart vb.)</p>
+        <canvas #barChart></canvas>
       </div>
     </div>
   </main>
 
-  <!-- Sidebar right -->
   <aside class="border-start p-3" style="width: 280px;">
     <div>
       <label for="datepicker" class="form-label">Select Date</label>
-      <input type="date" id="datepicker" class="form-control" [(ngModel)]="date" />
+      <input
+        type="date"
+        id="datepicker"
+        class="form-control"
+        [(ngModel)]="date"
+        (change)="onDateChange()"
+      />
     </div>
 
-    <div class="card mt-4" style="height: 180px;">
-      <div class="card-header">Upcoming Exercises</div>
-      <div class="card-body small">
-        <p>Lorem ipsum dolor sit amet...</p>
-        <hr />
-        <p>Lorem ipsum dolor sit amet...</p>
-      </div>
+    <div class="card mt-4" style="height: 590px; ">
+      <div class="card-header" style="border-bottom: 1px solid gray;">Assigned Exercises</div>
+      <div class="card-body small" *ngIf="assignedExercises.length > 0; else noExercises" style="overflow-y: auto;">
+  <ul class="list-unstyled mb-0">
+    <li *ngFor="let exercise of assignedExercises" tabindex="0" title="{{ exercise.name }} - {{ exercise.category }}" class="exercise-item">
+  <img [src]="exercise.image_url || 'assets/default-exercise-icon.png'" alt="{{ exercise.name }}" class="exercise-icon" />
+  <div class="exercise-text">
+    <strong>{{ exercise.name }}</strong>
+    <small>{{ exercise.category }}</small>
+  </div>
+</li>
+  </ul>
+</div>
+
+      <ng-template #noExercises>
+        <p>No exercises assigned for this date.</p>
+      </ng-template>
     </div>
   </aside>
 </div>

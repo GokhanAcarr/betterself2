@@ -16,7 +16,11 @@ export class WaterIntakeComponent implements OnInit {
   count = 0;
   loading = false;
 
+  maxCups = 8;
+  cups: number[] = [];
+
   ngOnInit() {
+    this.cups = Array(this.maxCups).fill(0);
     this.loadWaterIntake();
   }
 

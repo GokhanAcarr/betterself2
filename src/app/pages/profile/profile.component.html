@@ -16,7 +16,7 @@
       </button>
     </div>
 
-    <div class="row flex-grow-1 overflow-auto">
+    <div class="row flex-grow-1 overflow-auto" style="border-top: 1px solid gray ;padding-top: 20px;">
       <div class="col-md-3 mb-3 d-flex flex-column align-items-center">
         <div class="card shadow-sm w-100 mb-4" style="min-height: 400px; background-color: white;">
           <div class="card-body text-center">
@@ -57,15 +57,15 @@
         </div>
       </div>
 
-      <div class="col-md-9 d-flex flex-column gap-3">
-        <!-- Kartları eşit boyda ve yan yana göstermek için düzenlendi -->
+      <div class="col-md-9 d-flex flex-column gap-2">
+
         <div class="row g-3 align-items-stretch">
           <div class="col-md-6">
             <div class="card h-100">
-              <div class="card-body">
+             <div class="card-body">
                 <app-water-intake></app-water-intake>
               </div>
-            </div>
+              </div>
           </div>
           <div class="col-md-6">
             <div class="card h-100">
@@ -75,14 +75,12 @@
             </div>
           </div>
         </div>
-
         <app-posts></app-posts>
       </div>
     </div>
   </main>
 </div>
 
-<!-- Edit User Modal -->
 <div *ngIf="displayEditDialog" class="modal-backdrop fade show"></div>
 <div
   *ngIf="displayEditDialog"

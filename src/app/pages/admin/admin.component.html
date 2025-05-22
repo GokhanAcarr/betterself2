@@ -1,0 +1,57 @@
+<div class="d-flex vh-100">
+
+  <div class="col-md-6 p-4 border-end" style="background: #f8f9fa;">
+    <h4 class="mb-3">Manage Users</h4>
+    <input type="text" class="form-control mb-3" placeholder="Search user by name"
+           [(ngModel)]="userSearchTerm" (input)="searchUsers()" />
+    
+    <ul class="list-group">
+      <li *ngFor="let user of filteredUsers" class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ user.name }}</strong><br />
+          <small>{{ user.email }}</small>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="editUser(user)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user)">Delete</button>
+        </div>
+      </li>
+    </ul>
+
+    <p *ngIf="filteredUsers.length === 0" class="text-muted mt-3">No users found.</p>
+  </div>
+
+
+  <div class="col-md-6 p-4" style="background: #fff;">
+    <h4 class="mb-3">Add New Exercise</h4>
+    
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newExercise.name" />
+    </div>
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Category" [(ngModel)]="newExercise.category" />
+    </div>
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Description" [(ngModel)]="newExercise.description" />
+    </div>
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Image URL" [(ngModel)]="newExercise.image_url" />
+    </div>
+
+    <button class="btn btn-success mb-4" (click)="addExercise()">Add Exercise</button>
+
+    <h5>Exercise List</h5>
+    <ul class="list-group">
+      <li *ngFor="let ex of exercises" class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img [src]="ex.image_url" alt="{{ex.name}}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+          <div>
+            <strong>{{ ex.name }}</strong><br />
+            <small>{{ ex.category }}</small><br />
+            <small class="text-muted">{{ ex.description }}</small>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class WaterIntakeService {
-  private apiUrl = 'http://localhost:5000';  // Backend URL
+  private apiUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {}
 

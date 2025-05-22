@@ -11,15 +11,9 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
   styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent {
-  reps: string[] = [];
+
 
   constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.http.get<string[]>('http://localhost:5000/reps').subscribe(data => {
-      this.reps = data;
-    });
-  }
 
   scrollToSection() {
     const element = document.getElementById('learn-more-section');
@@ -28,7 +22,5 @@ export class LandingComponent {
     }
   }
 
-  splitReps(reps: string): string[] {
-    return reps.split('');
-  }
+
 }

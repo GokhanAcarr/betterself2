@@ -11,7 +11,7 @@ export class SleepRecordService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // token’ı localStorage’dan alıyoruz
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });

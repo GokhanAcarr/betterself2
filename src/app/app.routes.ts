@@ -7,6 +7,7 @@ import { NutritionComponent } from './pages/nutrition/nutrition.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'nutrition', component: NutritionComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin', component: AdminComponent},
 
   { path: '**', redirectTo: 'landing' }
 ];

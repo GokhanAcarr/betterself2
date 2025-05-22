@@ -18,7 +18,7 @@ import { SleepRecordComponent } from '../sleep-record/sleep-record.component';
 export class ProfileComponent implements OnInit {
   user: User | null = null;
   displayEditDialog = false;
-  editUser: Partial<User> = {}; // Partial tipi ile editable alanlar
+  editUser: Partial<User> = {};
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit {
     this.authService.updateUser(this.user.id, this.editUser).subscribe({
       next: () => {
         this.displayEditDialog = false;
-        this.loadUser(); // Güncel veriyi yükle
+        this.loadUser();
       },
       error: (err) => {
         console.error('Update failed:', err);

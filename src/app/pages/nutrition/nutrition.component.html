@@ -1,1 +1,111 @@
-<p>nutrition works!</p>
+<div class="d-flex vh-100">
+  <app-sidebar></app-sidebar>
+
+  <main class="flex-grow-1 p-4 overflow-auto" style="background-color: #f9f5f2;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 position-relative border-bottom pb-3">
+      <h2 class="mb-0">Nutrition Tracker</h2>
+      <button class="btn btn-link text-secondary position-absolute end-0 top-50 translate-middle-y"  title="Logout" aria-label="Logout">
+        <i class="bi bi-box-arrow-right fs-3"></i>
+      </button>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Food Search</div>
+      <div class="card-body d-flex flex-column" style="max-height: 500px;">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for food (name or category)"
+            [(ngModel)]="foodSearchTerm"
+            (input)="searchFood()"
+          />
+        </div>
+
+        <div class="mb-3" style="max-height: 400px; overflow-y: auto;">
+          <ul class="list-group">
+            <li *ngFor="let food of searchedFoods" class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{{ food.name }}</strong> – <small>{{ food.calories }} kcal</small>
+              </div>
+              <button
+                class="btn btn-sm btn-success"
+                (click)="addFoodToLog(food)"
+              >
+                Add
+              </button>
+            </li>
+          </ul>
+          <p *ngIf="searchedFoods.length === 0" class="text-muted mt-2">No foods found.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Daily Summary</div>
+      <div class="card-body d-flex flex-column" style="max-height: 500px;">
+
+        <div class="mb-3">
+          <label for="nutritionDate" class="form-label">Select Date</label>
+          <input type="date" id="nutritionDate" class="form-control" [(ngModel)]="selectedDate" />
+        </div>
+
+
+        <div class="mb-3">
+          <p><strong>Total Calories:</strong> {{ totalCalories }} kcal</p>
+          <div class="progress mb-2" style="height: 20px;">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              [style.width.%]="proteinPercentage"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              Protein {{ proteinPercentage | number: '1.0-0' }}%
+            </div>
+            <div
+              class="progress-bar bg-warning"
+              role="progressbar"
+              [style.width.%]="carbPercentage"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              Carbs {{ carbPercentage | number: '1.0-0' }}%
+            </div>
+            <div
+              class="progress-bar bg-danger"
+              role="progressbar"
+              [style.width.%]="fatPercentage"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              Fat {{ fatPercentage | number: '1.0-0' }}%
+            </div>
+          </div>
+        </div>
+
+
+        <div class="mb-3" style="max-height: 250px; overflow-y: auto;">
+          <h6>Logged Foods ({{ loggedFoods.length }})</h6>
+          <ul class="list-group">
+            <li *ngFor="let item of loggedFoods" class="list-group-item d-flex justify-content-between align-items-center">
+              {{ item.name }} - {{ item.calories }} kcal
+              <button class="btn btn-sm btn-danger" (click)="removeFoodFromLog(item)">Remove</button>
+            </li>
+          </ul>
+          <p *ngIf="loggedFoods.length === 0" class="text-muted mt-2">No foods logged.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+  </main>
+</div>

@@ -31,7 +31,7 @@ export class SleepRecordComponent implements OnInit {
 
   saveSleepHours() {
     if (this.inputHours == null || this.inputHours < 0) {
-      this.errorMsg = 'Geçerli bir saat girin.';
+      this.errorMsg = 'Wrong Entry.';
       return;
     }
     this.loading = true;
@@ -42,7 +42,7 @@ export class SleepRecordComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.errorMsg = err.error?.error || 'Bir hata oluştu.';
+        this.errorMsg = err.error?.error || 'An Error Occured.';
         this.loading = false;
       },
     });

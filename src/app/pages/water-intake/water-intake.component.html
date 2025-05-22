@@ -1,7 +1,11 @@
 <div class="card p-3" style="background-color: #fff;">
-  <div>
-  <p>Bugün içtiğin su: {{count}} bardak</p>
-  <button (click)="drinkWater()" [disabled]="loading">Su İç</button>
-</div>
-
+  <h5>Water Intake For Today</h5>
+  <div class="cups-container">
+    <i 
+      *ngFor="let cup of cups; let i = index" 
+      class="bi bi-cup-fill" 
+      [class.filled]="i < count">
+    </i>
+  </div>
+  <button (click)="drinkWater()" [disabled]="loading">Drink Water</button>
 </div>
