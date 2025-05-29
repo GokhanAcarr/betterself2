@@ -1,76 +1,134 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { FoodService } from '../../services/food.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-nutrition',
-  imports: [FormsModule, CommonModule, SidebarComponent],
   templateUrl: './nutrition.component.html',
-  styleUrl: './nutrition.component.scss'
+  styleUrls: ['./nutrition.component.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, SidebarComponent],
 })
-export class NutritionComponent {
+export class NutritionComponent implements OnInit {
+  isAdmin: boolean = false;
   foodSearchTerm: string = '';
-  selectedDate: string = '';
+  foodQuantities: { [key: string]: number } = {};
   searchedFoods: any[] = [];
   loggedFoods: any[] = [];
+  selectedDate: string = new Date().toISOString().substring(0, 10);
+  totalCalories: number = 0;
+  proteinPercentage: number = 0;
+  carbPercentage: number = 0;
+  fatPercentage: number = 0;
 
+  constructor(private foodService: FoodService, private authService: AuthService) {}
 
-  foodDatabase = [
-    { name: 'Chicken Breast', calories: 165, protein: 31, carbs: 0, fat: 3 },
-    { name: 'Brown Rice', calories: 216, protein: 5, carbs: 45, fat: 2 },
-    { name: 'Avocado', calories: 160, protein: 2, carbs: 9, fat: 15 },
-    { name: 'Greek Yogurt', calories: 100, protein: 10, carbs: 4, fat: 0 },
-    { name: 'Banana', calories: 105, protein: 1, carbs: 27, fat: 0 },
-    { name: 'Almonds', calories: 170, protein: 6, carbs: 6, fat: 15 },
-  ];
-
-
-  totalCalories = 0;
-  proteinPercentage = 0;
-  carbPercentage = 0;
-  fatPercentage = 0;
-
-  searchFood() {
-    const term = this.foodSearchTerm.toLowerCase();
-    this.searchedFoods = this.foodDatabase.filter(food =>
-      food.name.toLowerCase().includes(term)
-    );
+  ngOnInit(): void {
+    const user = this.authService.getUser();
+    if(user) {
+      this.isAdmin = user.is_admin || false;
+    }
+    this.loadLoggedFoods();
   }
 
-  addFoodToLog(food: any) {
-    if (!this.selectedDate) {
-      alert('Please select a date first.');
+  onSearchClick(): void {
+    if (!this.foodSearchTerm.trim()) {
       return;
     }
 
-    this.loggedFoods.push({ ...food, date: this.selectedDate });
-    this.updateSummary();
-  }
-
-  removeFoodFromLog(food: any) {
-    this.loggedFoods = this.loggedFoods.filter(f => f !== food);
-    this.updateSummary();
-  }
-
-  updateSummary() {
-    const total = this.loggedFoods.reduce(
-      (acc, food) => {
-        acc.calories += food.calories;
-        acc.protein += food.protein;
-        acc.carbs += food.carbs;
-        acc.fat += food.fat;
-        return acc;
+    this.foodService.searchFood(this.foodSearchTerm).subscribe({
+      next: (data) => {
+        this.searchedFoods = data;
+        this.searchedFoods.forEach(food => this.foodQuantities[food.name] = 100);
       },
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
-    );
-
-    const macroSum = total.protein + total.carbs + total.fat;
-
-    this.totalCalories = total.calories;
-    this.proteinPercentage = macroSum ? (total.protein / macroSum) * 100 : 0;
-    this.carbPercentage = macroSum ? (total.carbs / macroSum) * 100 : 0;
-    this.fatPercentage = macroSum ? (total.fat / macroSum) * 100 : 0;
+      error: (err) => {
+        console.error('Arama hatası:', err);
+        this.searchedFoods = [];
+      }
+    });
   }
+
+  onQuantityChange(foodName: string, value: string): void {
+    const quantity = Number(value);
+    this.foodQuantities[foodName] = quantity > 0 ? quantity : 100;
+  }
+
+  addFoodToLog(food: any): void {
+  const quantity = this.foodQuantities[food.name] || 100;
+
+  const payload = {
+    food_name: food.name,
+    calories: (food.calories_per_100g * quantity) / 100,
+    carbs: (food.carbs_per_100g * quantity) / 100,
+    protein: (food.protein_per_100g * quantity) / 100,
+    fats: (food.fat_per_100g * quantity) / 100,
+    quantity: quantity,
+    date: this.selectedDate
+  };
+
+  this.foodService.logFood(payload).subscribe({
+    next: () => {
+      this.loadLoggedFoods();
+      this.foodQuantities[food.name] = 100;
+    },
+    error: (err) => {
+      console.error('Yemek eklenirken hata:', err);
+      alert('Yemek eklenirken hata oluştu.');
+    }
+  });
 }
 
+  loadLoggedFoods(): void {
+    if (!this.selectedDate) return;
+
+    this.foodService.getFoodLogs(this.selectedDate).subscribe({
+      next: (data) => {
+        this.loggedFoods = data;
+        this.calculateNutritionSummary();
+      },
+      error: (err) => {
+        console.error('Loglar yüklenirken hata:', err);
+      }
+    });
+  }
+
+  onDateChange(): void {
+    this.loadLoggedFoods();
+  }
+
+  removeFoodFromLog(foodLog: any): void {
+    this.foodService.deleteFoodLog(foodLog.id).subscribe({
+      next: () => {
+        this.loadLoggedFoods();
+      },
+      error: (err) => {
+        console.error('Silme hatası:', err);
+        alert('Yemek kaydı silinirken hata oluştu.');
+      }
+    });
+  }
+
+  calculateNutritionSummary(): void {
+    let totalCalories = 0;
+    let totalProtein = 0;
+    let totalCarbs = 0;
+    let totalFats = 0;
+
+    this.loggedFoods.forEach(food => {
+      totalCalories += food.calories || 0;
+      totalProtein += food.protein || 0;
+      totalCarbs += food.carbs || 0;
+      totalFats += food.fats || 0;
+    });
+
+    this.totalCalories = totalCalories;
+
+    const totalMacros = totalProtein + totalCarbs + totalFats;
+    this.proteinPercentage = totalMacros ? (totalProtein / totalMacros) * 100 : 0;
+    this.carbPercentage = totalMacros ? (totalCarbs / totalMacros) * 100 : 0;
+    this.fatPercentage = totalMacros ? (totalFats / totalMacros) * 100 : 0;
+  }
+}

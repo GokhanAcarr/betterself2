@@ -42,6 +42,17 @@ export class ExerciseService {
     });
   }
 
+  addExercise(exercise: Exercise): Observable<any> {
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  });
+
+  return this.http.post<any>(`${this.baseUrl}/add-exercise`, exercise, { headers });
+}
+
   getPrograms(token: string): Observable<Program[]> {
     const headers = this.getAuthHeaders(token);
     return this.http.get<Program[]>(`${this.baseUrl}/programs`, { headers });

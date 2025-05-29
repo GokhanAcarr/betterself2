@@ -12,8 +12,12 @@
     <a routerLink="/nutrition"  class="nav-link d-flex align-items-center justify-content-start fs-5 mb-2 text-secondary">
       <i class="bi bi-journal-medical me-2"></i> Nutrition
     </a>
-    <a routerLink="/profile"  class="nav-link d-flex align-items-center justify-content-start fs-5  text-secondary ">
+    <a routerLink="/profile"  class="nav-link d-flex align-items-center justify-content-start fs-5 text-secondary ">
       <i class="bi bi-person-fill me-2"></i> Profile
+    </a>
+
+    <a *ngIf="isAdmin" routerLink="/admin" class="nav-link d-flex align-items-center justify-content-start fs-5 mt-3 text-danger">
+      <i class="bi bi-shield-lock-fill me-2"></i> Admin Panel
     </a>
   </div>
 </nav>

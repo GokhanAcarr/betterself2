@@ -15,6 +15,7 @@ export interface User {
   target_weight_kg?: number;
   target_bmi?: number;
   preferred_sleep_hours?: number;
+  is_admin?: boolean;
 }
 
 @Injectable({
@@ -53,6 +54,12 @@ export class AuthService {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }
+
+  getUsers(): Observable<User[]> {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.get<User[]>(`${this.apiUrl}/users`, { headers });
+}
 
   fetchUser(userId: number): Observable<User> {
     const token = localStorage.getItem('token') || '';

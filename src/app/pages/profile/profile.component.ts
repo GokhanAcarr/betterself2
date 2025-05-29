@@ -19,11 +19,16 @@ export class ProfileComponent implements OnInit {
   user: User | null = null;
   displayEditDialog = false;
   editUser: Partial<User> = {};
+  isAdmin: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadUser();
+    const user = this.authService.getUser();
+    if (user) {
+      this.isAdmin = user.is_admin || false;
+    }
   }
 
   loadUser(): void {

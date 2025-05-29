@@ -1,57 +1,215 @@
-<div class="d-flex vh-100">
+  <div class="d-flex vh-100">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
 
-  <div class="col-md-6 p-4 border-end" style="background: #f8f9fa;">
-    <h4 class="mb-3">Manage Users</h4>
-    <input type="text" class="form-control mb-3" placeholder="Search user by name"
-           [(ngModel)]="userSearchTerm" (input)="searchUsers()" />
-    
-    <ul class="list-group">
-      <li *ngFor="let user of filteredUsers" class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <strong>{{ user.name }}</strong><br />
-          <small>{{ user.email }}</small>
+    <!-- Main Content -->
+    <main class="flex-grow-1 p-4 overflow-auto" style="background-color: #f9f5f2; height: 100vh;">
+
+      <div class="d-flex gap-4" style="height: 100%;">
+
+        <!-- Card 1: Create Exercise -->
+<div
+  class="card shadow rounded-4 p-4 flex-fill"
+  style="min-width: 400px; max-width: 600px; overflow-y: auto;"
+>
+  <h4 class="mb-3">Create Exercise</h4>
+  <form (ngSubmit)="addExercise()" #exerciseForm="ngForm" novalidate>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label" for="exerciseName">Exercise Name</label>
+        <input
+          id="exerciseName"
+          name="name"
+          type="text"
+          class="form-control"
+          [(ngModel)]="newExercise.name"
+          required
+          #name="ngModel"
+        />
+        <div class="text-danger" *ngIf="name.invalid && name.touched">
+          Exercise Name is required.
         </div>
-        <div>
-          <button class="btn btn-sm btn-outline-primary me-2" (click)="editUser(user)">Edit</button>
-          <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user)">Delete</button>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label" for="exerciseCategory">Category</label>
+        <input
+          id="exerciseCategory"
+          name="category"
+          type="text"
+          class="form-control"
+          [(ngModel)]="newExercise.category"
+          required
+          #category="ngModel"
+        />
+        <div class="text-danger" *ngIf="category.invalid && category.touched">
+          Category is required.
         </div>
-      </li>
-    </ul>
+      </div>
 
-    <p *ngIf="filteredUsers.length === 0" class="text-muted mt-3">No users found.</p>
-  </div>
+      <div class="col-md-12 mb-3">
+        <label class="form-label" for="exerciseDescription">Description</label>
+        <textarea
+          id="exerciseDescription"
+          name="description"
+          class="form-control"
+          [(ngModel)]="newExercise.description"
+          rows="3"
+          required
+          #description="ngModel"
+        ></textarea>
+        <div
+          class="text-danger"
+          *ngIf="description.invalid && description.touched"
+        >
+          Description is required.
+        </div>
+      </div>
 
-
-  <div class="col-md-6 p-4" style="background: #fff;">
-    <h4 class="mb-3">Add New Exercise</h4>
-    
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newExercise.name" />
+      <div class="col-md-12 mb-3">
+        <label class="form-label" for="exerciseImageUrl">Image URL</label>
+        <input
+          id="exerciseImageUrl"
+          name="image_url"
+          type="text"
+          class="form-control"
+          [(ngModel)]="newExercise.image_url"
+          required
+          #imageUrl="ngModel"
+        />
+        <div class="text-danger" *ngIf="imageUrl.invalid && imageUrl.touched">
+          Image URL is required.
+        </div>
+      </div>
     </div>
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="Category" [(ngModel)]="newExercise.category" />
-    </div>
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="Description" [(ngModel)]="newExercise.description" />
-    </div>
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="Image URL" [(ngModel)]="newExercise.image_url" />
-    </div>
 
-    <button class="btn btn-success mb-4" (click)="addExercise()">Add Exercise</button>
+    <button
+      type="submit"
+      class="btn btn-primary mt-2"
+      [disabled]="exerciseForm.invalid || exerciseAdding"
+    >
+      {{ exerciseAdding ? 'Adding...' : 'Submit' }}
+    </button>
 
-    <h5>Exercise List</h5>
-    <ul class="list-group">
-      <li *ngFor="let ex of exercises" class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          <img [src]="ex.image_url" alt="{{ex.name}}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
-          <div>
-            <strong>{{ ex.name }}</strong><br />
-            <small>{{ ex.category }}</small><br />
-            <small class="text-muted">{{ ex.description }}</small>
+    <div *ngIf="exerciseAddError" class="text-danger mt-2">
+      {{ exerciseAddError }}
+    </div>
+    <div *ngIf="exerciseAddSuccess" class="text-success mt-2">
+      {{ exerciseAddSuccess }}
+    </div>
+  </form>
+</div>
+
+
+        <!-- Card 2: List of Users -->
+        <div class="card shadow rounded-4 p-4 flex-fill" style="min-width: 400px; max-width: 600px; overflow-y: auto;">
+          <h4 class="mb-3">List of Users</h4>
+
+          <!-- Filter Input -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for user by first name"
+              [(ngModel)]="searchTerm"
+              aria-label="User search input"
+              name="search"
+            />
+          </div>
+
+          <!-- User Table -->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers">
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.age }}</td>
+                <td class="d-flex gap-2">
+                  <button class="btn btn-sm btn-primary" (click)="showEditDialog(user)">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Edit Modal -->
+    <div *ngIf="displayEditDialog" class="modal-backdrop fade show"></div>
+    <div
+      *ngIf="displayEditDialog"
+      class="modal d-block"
+      tabindex="-1"
+      role="dialog"
+      style="background: rgba(0, 0, 0, 0.5);"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit User</h5>
+            <button type="button" class="btn-close" (click)="displayEditDialog = false" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form #editForm="ngForm">
+              <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input class="form-control" [(ngModel)]="editUser.first_name" name="firstName" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input class="form-control" [(ngModel)]="editUser.last_name" name="lastName" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Age</label>
+                <input type="number" class="form-control" [(ngModel)]="editUser.age" name="age" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Country</label>
+                <input class="form-control" [(ngModel)]="editUser.country" name="country" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Height (cm)</label>
+                <input type="number" class="form-control" [(ngModel)]="editUser.height_cm" name="height_cm" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" [(ngModel)]="editUser.weight_kg" name="weight_kg" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Target Weight (kg)</label>
+                <input type="number" class="form-control" [(ngModel)]="editUser.target_weight_kg" name="target_weight_kg" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Target BMI</label>
+                <input type="number" step="0.1" class="form-control" [(ngModel)]="editUser.target_bmi" name="target_bmi" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Preferred Sleep Hours</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  [(ngModel)]="editUser.preferred_sleep_hours"
+                  name="preferred_sleep_hours"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="displayEditDialog = false">Cancel</button>
+            <button class="btn btn-primary" (click)="saveUser()">Save</button>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
-</div>

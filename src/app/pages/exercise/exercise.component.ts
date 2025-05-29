@@ -156,8 +156,4 @@ export class ExerciseComponent {
       }
     });
   }
-
-  logout() {
-    alert('Logging out...');
-  }
 }
