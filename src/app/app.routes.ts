@@ -9,16 +9,24 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { AdminComponent } from './pages/admin/admin.component';
 
+// 👇 Guard'ları buraya import et
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
-  { path: 'overview', component: OverviewComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'exercise', component: ExerciseComponent },
-  { path: 'nutrition', component: NutritionComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'admin', component: AdminComponent},
+
+  // 🛡️ Sadece login olan kullanıcılar
+  { path: 'overview', component: OverviewComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'exercise', component: ExerciseComponent, canActivate: [AuthGuard] },
+  { path: 'nutrition', component: NutritionComponent, canActivate: [AuthGuard] },
+
+  // 🔐 Sadece admin kullanıcılar
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard] },
 
   { path: '**', redirectTo: 'landing' }
 ];
