@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ExerciseService } from '../../services/exercise.service';
 import { Exercise, Program } from '../../services/exercise.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-exercise',
@@ -13,9 +14,14 @@ import { Exercise, Program } from '../../services/exercise.service';
   standalone: true,
 })
 export class ExerciseComponent {
-  constructor(private exerciseService: ExerciseService) {}
+  isAdmin: boolean = false;
+  constructor(private exerciseService: ExerciseService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    const user = this.authService.getUser();
+    if(user) {
+      this.isAdmin = user.is_admin || false;
+    }
     this.loadExercises();
     this.loadPrograms();
   }

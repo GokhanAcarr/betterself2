@@ -14,6 +14,7 @@ import { ExerciseService, Exercise } from '../../services/exercise.service';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+  isAdmin: boolean = false;
   users: User[] = [];
   displayEditDialog = false;
   editUser: Partial<User> = {};
@@ -39,6 +40,10 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const user = this.authService.getUser();
+    if(user) {
+      this.isAdmin = user.is_admin || false;
+    }
     this.loadUsers();
   }
 

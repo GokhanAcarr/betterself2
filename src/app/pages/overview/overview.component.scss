@@ -35,15 +35,13 @@ canvas {
   gap: 12px;
   padding: 8px 12px;
   border-radius: 6px;
-  background-color: #e7f1ff;
+  background-color: rgba(101, 71, 143, 0.15); /* #65478F renginin %15 opaklığı */
   margin-bottom: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.exercise-item:hover {
-  background-color: #d0e4ff;
-}
+
 
 .exercise-icon {
   width: 32px;
@@ -56,7 +54,7 @@ canvas {
 
 .exercise-text strong {
   display: block;
-  color: #0d6efd;
+  color: #65478F; /* Başlıklarda da aynı mor-mavi ton */
   font-size: 1rem;
 }
 
@@ -64,5 +62,3 @@ canvas {
   color: #6c757d;
   font-style: italic;
 }
-
-

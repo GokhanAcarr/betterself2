@@ -100,36 +100,57 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   }
 
   private renderChart(labels: string[], data: number[]): void {
-    if (this.chart) {
-      this.chart.destroy();
-    }
+  if (this.chart) {
+    this.chart.destroy();
+  }
 
-    const config: ChartConfiguration = {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Calories Gained',
-          data,
-          backgroundColor: 'rgba(75, 192, 192, 0.7)',
-        }]
+  // Her bar için farklı background ve border renkleri
+  const backgroundColors = [
+    'rgba(255, 99, 132, 0.7)',
+    'rgba(54, 162, 235, 0.7)',
+    'rgba(255, 206, 86, 0.7)',
+    'rgba(75, 192, 192, 0.7)',
+    'rgba(153, 102, 255, 0.7)',
+    'rgba(255, 159, 64, 0.7)',
+    'rgba(199, 199, 199, 0.7)'
+  ];
+
+  // Border renkleri background renklerinin opak hali (alpha=1)
+  const borderColor = 'gray';
+
+  const config: ChartConfiguration = {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Calories Gained',
+        data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColor,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: 'Calories Gained Over Last 7 Days',
+        }
       },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' },
-          title: {
-            display: true,
-            text: 'Calories Gained Over Last 7 Days',
-          }
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
-    };
-
-    if (this.barChartRef?.nativeElement) {
-      this.chart = new Chart(this.barChartRef.nativeElement, config);
     }
+  };
+
+  if (this.barChartRef?.nativeElement) {
+    this.chart = new Chart(this.barChartRef.nativeElement, config);
   }
+}
 
   private loadSleepQuality(preferredSleepHours: number): void {
     this.sleepRecordService.getSleepRecord().subscribe({

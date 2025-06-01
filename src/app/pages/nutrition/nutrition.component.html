@@ -1,17 +1,18 @@
 <div class="d-flex vh-100">
   <app-sidebar [isAdmin]="isAdmin"></app-sidebar>
 
-  <main class="flex-grow-1 p-4 overflow-auto" style="background-color: #f9f5f2;">
+  <main class="flex-grow-1 p-4 overflow-auto d-flex flex-column" style="background-color: #f9f5f2;">
+
     <div class="d-flex justify-content-between align-items-center mb-4 position-relative border-bottom pb-3">
       <h2 class="mb-0">Nutrition Tracker</h2>
     </div>
 
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4 justify-content-center" style="flex-grow: 1; min-height: 0;">
       <!-- Food Search -->
-      <div class="col-md-6">
-        <div class="card h-100">
+      <div class="col-md-6 d-flex justify-content-center">
+        <div class="card" style="height: 600px; width: 100%; max-width: 600px;">
           <div class="card-header">Food Search</div>
-          <div class="card-body d-flex flex-column" style="max-height: 500px;">
+          <div class="card-body d-flex flex-column" style="overflow-y: auto;">
             <div class="mb-3 d-flex">
               <input
                 type="text"
@@ -20,10 +21,10 @@
                 [(ngModel)]="foodSearchTerm"
                 aria-label="Food search input"
               />
-              <button class="btn btn-primary" (click)="onSearchClick()">Search</button>
+              <button class="btn btn-sm text-white" style="background-color: #65478f;" (click)="onSearchClick()">Search</button>
             </div>
 
-            <div class="mb-3" style="max-height: 400px; overflow-y: auto;">
+            <div class="mb-3" style="max-height: 250px; overflow-y: auto; border: solid 1px gray; border-radius: 5px;">
               <ul class="list-group">
                 <li *ngFor="let food of searchedFoods" class="list-group-item d-flex justify-content-between align-items-center">
                   <div>
@@ -40,7 +41,8 @@
                       aria-label="Quantity in grams"
                     />
                     <button
-                      class="btn btn-sm btn-success"
+                      class="btn btn-sm text-white"
+                      style="background-color: #65478f;"
                       (click)="addFoodToLog(food)"
                     >
                       Add
@@ -55,10 +57,10 @@
       </div>
 
       <!-- Daily Summary & Logs -->
-      <div class="col-md-6">
-        <div class="card h-100">
+      <div class="col-md-6 d-flex justify-content-center">
+        <div class="card" style="height: 600px; width: 100%; max-width: 600px;">
           <div class="card-header">Daily Summary</div>
-          <div class="card-body d-flex flex-column" style="max-height: 500px;">
+          <div class="card-body d-flex flex-column" style="overflow-y: auto;">
             <div class="mb-3">
               <label for="nutritionDate" class="form-label">Select Date</label>
               <input 
@@ -75,41 +77,47 @@
               <p><strong>Total Calories:</strong> {{ totalCalories }} kcal</p>
               <div class="progress mb-2" style="height: 20px;">
                 <div
-                  class="progress-bar bg-success"
+                  class="progress-bar"
                   role="progressbar"
                   [style.width.%]="proteinPercentage"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
+                  style="background-color: #28a745;"
                 >
                   Protein {{ proteinPercentage | number: '1.0-0' }}%
                 </div>
                 <div
-                  class="progress-bar bg-warning"
+                  class="progress-bar"
                   role="progressbar"
                   [style.width.%]="carbPercentage"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
+                  style="background-color: #ffc107;"
                 >
                   Carbs {{ carbPercentage | number: '1.0-0' }}%
                 </div>
                 <div
-                  class="progress-bar bg-danger"
+                  class="progress-bar"
                   role="progressbar"
                   [style.width.%]="fatPercentage"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
+                  style="background-color: #dc3545;"
                 >
                   Fat {{ fatPercentage | number: '1.0-0' }}%
                 </div>
               </div>
             </div>
 
-            <div class="mb-3 flex-grow-1" style="overflow-y: auto;">
+            <div class="mb-3 flex-grow-1" style="overflow-y: auto; border: 1px solid gray; border-radius: 5px; padding: 10px;">
               <h6>Logged Foods ({{ loggedFoods.length }})</h6>
               <ul class="list-group">
                 <li *ngFor="let item of loggedFoods" class="list-group-item d-flex justify-content-between align-items-center">
-                  {{ item.food_name }} - {{ item.calories }} kcal
-                  <button class="btn btn-sm btn-danger" (click)="removeFoodFromLog(item)">Remove</button>
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <strong>{{ item.food_name }}</strong> – <small>{{ item.calories }} kcal</small>
+                    </div>
+                  </div>
+                  <button
+                    class="btn btn-sm btn-danger text-white"
+                    (click)="removeFoodFromLog(item)"
+                  >
+                    Remove
+                  </button>
                 </li>
               </ul>
               <p *ngIf="loggedFoods.length === 0" class="text-muted mt-2">No foods logged.</p>
