@@ -1,76 +1,43 @@
 from flask import Flask
-from dotenv import load_dotenv
-import os
-
 from extensions import db, jwt, cors
-from models import *  # tüm modeller yükleniyor
-from routes import (
-    auth_bp,
-    food_bp,
-    post_bp,
-    exercise_bp,
-    assignment_bp,
-    water_bp,
-    sleep_bp,
-    stats_bp,
-)
-from flasgger import Swagger
+from datetime import timedelta
 
-# .env dosyasını yükle
-load_dotenv()
+# Blueprint'leri import et
+from routes.auth import auth_bp
+from routes.exercise import exercise_bp
+from routes.food import food_bp
+from routes.post import post_bp
+from routes.sleep import sleep_bp
+from routes.water import water_bp
 
-# Swagger Authorize için özel template
-swagger_template = {
-    "swagger": "2.0",
-    "info": {
-        "title": "BetterSelf API",
-        "description": "Swagger UI for testing JWT-protected routes",
-        "version": "1.0"
-    },
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header",
-            "description": "JWT Authorization header using the Bearer scheme. Example: Bearer <your_token>"
-        }
-    },
-    "security": [{"Bearer": []}]
-}
+def create_app():
+    app = Flask(__name__)
 
-app = Flask(__name__)
+    # Konfigürasyonlar
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:002312@127.0.0.1:3306/exercisedb'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['JWT_SECRET_KEY'] = 'secret-key'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
 
-# Swagger başlat
-Swagger(app, template=swagger_template)
+    # Extensions
+    db.init_app(app)
+    jwt.init_app(app)
+    cors.init_app(app, resources={r"/*": {"origins": "*"}})
 
-# CORS başlat
-cors.init_app(app, resources={r"/*": {"origins": "*"}})
+    # Blueprint kayıtları
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(exercise_bp)
+    app.register_blueprint(food_bp)
+    app.register_blueprint(post_bp)
+    app.register_blueprint(sleep_bp)
+    app.register_blueprint(water_bp)
 
-# Config ayarları
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'secret-key')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 86400  # 1 gün
-
-# Extensionları başlat
-db.init_app(app)
-jwt.init_app(app)
-
-# Blueprints (tüm route dosyalarını ekle)
-app.register_blueprint(auth_bp)
-app.register_blueprint(food_bp)
-app.register_blueprint(post_bp)
-app.register_blueprint(exercise_bp)
-app.register_blueprint(assignment_bp)
-app.register_blueprint(water_bp)
-app.register_blueprint(sleep_bp)
-app.register_blueprint(stats_bp)
-
-@app.route('/')
-def index():
-    return {"message": "BetterSelf API is running."}
-
-if __name__ == '__main__':
+    # Veritabanını oluştur
     with app.app_context():
         db.create_all()
+
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)

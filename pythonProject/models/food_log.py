@@ -1,5 +1,5 @@
-from datetime import date
 from extensions import db
+from datetime import date
 
 class UserFoodLog(db.Model):
     __tablename__ = 'user_food_logs'
