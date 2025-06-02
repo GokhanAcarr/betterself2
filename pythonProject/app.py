@@ -14,20 +14,18 @@ import os
 def create_app():
     app = Flask(__name__)
 
-    # Konfigürasyonlar
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
-
-
+    # Config
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')  # Docker env'den geliyor
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_SECRET_KEY'] = 'secret-key'
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'secret-key')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
 
-    # Extensions
+    # Extensions init
     db.init_app(app)
     jwt.init_app(app)
     cors.init_app(app, resources={r"/*": {"origins": "*"}})
 
-    # Blueprint kayıtları
+    # Blueprints register
     app.register_blueprint(auth_bp)
     app.register_blueprint(exercise_bp)
     app.register_blueprint(food_bp)
@@ -35,12 +33,8 @@ def create_app():
     app.register_blueprint(sleep_bp)
     app.register_blueprint(water_bp)
 
-    # Veritabanını oluştur
+    # Create DB tables
     with app.app_context():
         db.create_all()
 
     return app
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
