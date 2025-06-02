@@ -22,7 +22,7 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://betterself2-production.up.railway.app/auth';
+  private apiUrl = 'https://betterself2-production.up.railway.app/';
 
 
   constructor(private http: HttpClient, private router: Router) {}
