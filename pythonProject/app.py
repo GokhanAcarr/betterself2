@@ -9,12 +9,15 @@ from routes.food import food_bp
 from routes.post import post_bp
 from routes.sleep import sleep_bp
 from routes.water import water_bp
+import os
 
 def create_app():
     app = Flask(__name__)
 
     # Konfigürasyonlar
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1233@127.0.0.1:3306/exercisedb'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
+
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = 'secret-key'
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
